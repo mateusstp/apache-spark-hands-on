@@ -4,7 +4,7 @@ from pyspark.sql import functions as func
 spark = SparkSession.builder.appName("WordCount").getOrCreate()
 
 # Read each line of my book into a dataframe
-inputDF = spark.read.text("file:///SparkCourse/book.txt")
+inputDF = spark.read.text("= sc.textFile(DATA_FILE)book.txt")
 
 # Split using a regular expression that extracts words
 words = inputDF.select(func.explode(func.split(inputDF.value, "\\W+")).alias("word"))

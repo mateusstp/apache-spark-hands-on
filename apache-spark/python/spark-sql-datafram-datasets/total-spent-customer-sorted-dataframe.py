@@ -12,7 +12,7 @@ customerOrderSchema = StructType([ \
                                   ])
 
 # Load up the data into spark dataset
-customersDF = spark.read.schema(customerOrderSchema).csv("file:///SparkCourse/customer-orders.csv")
+customersDF = spark.read.schema(customerOrderSchema).csv("= sc.textFile(DATA_FILE)customer-orders.csv")
 
 totalByCustomer = customersDF.groupBy("cust_id").agg(func.round(func.sum("amount_spent"), 2) \
                                       .alias("total_spent"))

@@ -1,5 +1,8 @@
-#Boilerplate stuff:
+import os
 from pyspark import SparkConf, SparkContext
+
+BASE_DIR = os.path.join(os.getcwd().split('python')[0], 'data')
+DATA_FILE = os.path.join(BASE_DIR, 'marvel-graph.txt')
 
 conf = SparkConf().setMaster("local").setAppName("DegreesOfSeparation")
 sc = SparkContext(conf = conf)
@@ -30,7 +33,7 @@ def convertToBFS(line):
 
 
 def createStartingRdd():
-    inputFile = sc.textFile("file:///sparkcourse/marvel-graph.txt")
+    inputFile = sc.textFile(DATA_FILE)
     return inputFile.map(convertToBFS)
 
 def bfsMap(node):
