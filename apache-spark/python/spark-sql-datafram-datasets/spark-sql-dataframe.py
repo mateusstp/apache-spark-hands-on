@@ -1,9 +1,13 @@
+import os
 from pyspark.sql import SparkSession
+
+BASE_DIR = os.path.join(os.getcwd().split('python')[0], 'data')
+DATA_FILE = os.path.join(BASE_DIR, 'fakefriends-header.csv')
 
 spark = SparkSession.builder.appName("SparkSQL").getOrCreate()
 
 people = spark.read.option("header", "true").option("inferSchema", "true")\
-    .csv("= sc.textFile(DATA_FILE)fakefriends-header.csv")
+    .csv(DATA_FILE)
     
 print("Here is our inferred schema:")
 people.printSchema()

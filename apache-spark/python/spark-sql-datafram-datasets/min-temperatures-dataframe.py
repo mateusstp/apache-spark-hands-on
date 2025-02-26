@@ -1,6 +1,10 @@
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as func
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType
+
+BASE_DIR = os.path.join(os.getcwd().split('python')[0], 'data')
+DATA_FILE = os.path.join(BASE_DIR, '1800.csv')
 
 spark = SparkSession.builder.appName("MinTemperatures").getOrCreate()
 
@@ -11,7 +15,7 @@ schema = StructType([ \
                      StructField("temperature", FloatType(), True)])
 
 # // Read the file as dataframe
-df = spark.read.schema(schema).csv("= sc.textFile(DATA_FILE)1800.csv")
+df = spark.read.schema(schema).csv(DATA_FILE)
 df.printSchema()
 
 # Filter out all but TMIN entries
