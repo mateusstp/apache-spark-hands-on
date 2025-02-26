@@ -4,16 +4,20 @@ Created on Mon Sep  7 15:28:00 2020
 
 @author: Frank
 """
-
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as func
 from pyspark.sql.types import StructType, StructField, IntegerType, LongType
 import codecs
 
+BASE_DIR = os.path.join(os.getcwd().split('python')[0], 'data')
+DATA_ITEM = os.path.join(BASE_DIR, 'movielens/ml-100k', 'u.item')
+DATA_FILE = os.path.join(BASE_DIR, 'movielens/ml-100k', 'u.data')
+
 def loadMovieNames():
     movieNames = {}
     # CHANGE THIS TO THE PATH TO YOUR u.ITEM FILE:
-    with codecs.open("E:/SparkCourse/ml-100k/u.ITEM", "r", encoding='ISO-8859-1', errors='ignore') as f:
+    with codecs.open(DATA_ITEM, "r", encoding='ISO-8859-1', errors='ignore') as f:
         for line in f:
             fields = line.split('|')
             movieNames[int(fields[0])] = fields[1]
@@ -31,7 +35,7 @@ schema = StructType([ \
                      StructField("timestamp", LongType(), True)])
 
 # Load up movie data as dataframe
-moviesDF = spark.read.option("sep", "\t").schema(schema).csv("= sc.textFile(DATA_FILE)ml-100k/u.data")
+moviesDF = spark.read.option("sep", "\t").schema(schema).csv(DATA_FILE)
 
 movieCounts = moviesDF.groupBy("movieID").count()
 

@@ -1,6 +1,11 @@
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as func
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+
+
+BASE_DIR = os.path.join(os.getcwd().split('python')[0], 'data')
+DATA_FILE = os.path.join(BASE_DIR, 'marvel-names.txt')
 
 spark = SparkSession.builder.appName("MostObscureSuperheroes").getOrCreate()
 
@@ -8,7 +13,7 @@ schema = StructType([ \
                      StructField("id", IntegerType(), True), \
                      StructField("name", StringType(), True)])
 
-names = spark.read.schema(schema).option("sep", " ").csv("= sc.textFile(DATA_FILE)Marvel-names.txt")
+names = spark.read.schema(schema).option("sep", " ").csv("= sc.textFile(DATA_FILE)")
 
 lines = spark.read.text("= sc.textFile(DATA_FILE)Marvel-graph.txt")
 

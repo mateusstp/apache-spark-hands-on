@@ -110,7 +110,7 @@ def bfsReduce(data1, data2):
 iterationRdd = createStartingRdd()
 
 for iteration in range(0, 10):
-    print("Running BFS iteration# " + str(iteration+1))
+    print("\nRunning BFS iteration# " + str(iteration+1))
 
     # Create new vertices as needed to darken or reduce distances in the
     # reduce stage. If we encounter the node we're looking for as a GRAY
@@ -119,11 +119,11 @@ for iteration in range(0, 10):
 
     # Note that mapped.count() action here forces the RDD to be evaluated, and
     # that's the only reason our accumulator is actually updated.
-    print("Processing " + str(mapped.count()) + " values.")
+    print("\nProcessing " + str(mapped.count()) + " values.\n")
 
     if (hitCounter.value > 0):
-        print("Hit the target character! From " + str(hitCounter.value) \
-            + " different direction(s).")
+        print("\nHit the target character! From " + str(hitCounter.value) \
+            + " different direction(s).\n")
         break
 
     # Reducer combines data for each character ID, preserving the darkest

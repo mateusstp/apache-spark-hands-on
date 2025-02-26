@@ -1,6 +1,11 @@
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as func
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+
+BASE_DIR = os.path.join(os.getcwd().split('python')[0], 'data')
+DATA_FILE_NAME = os.path.join(BASE_DIR, 'marvel-names.txt')
+DATA_FILE_GRAPTH = os.path.join(BASE_DIR, 'marvel-graph.txt')
 
 spark = SparkSession.builder.appName("MostPopularSuperhero").getOrCreate()
 
@@ -8,9 +13,9 @@ schema = StructType([ \
                      StructField("id", IntegerType(), True), \
                      StructField("name", StringType(), True)])
 
-names = spark.read.schema(schema).option("sep", " ").csv("= sc.textFile(DATA_FILE)Marvel-names.txt")
+names = spark.read.schema(schema).option("sep", " ").csv(DATA_FILE_NAME)
 
-lines = spark.read.text("= sc.textFile(DATA_FILE)Marvel-graph.txt")
+lines = spark.read.text(DATA_FILE_GRAPTH)
 
 # Small tweak vs. what's shown in the video: we trim each line of whitespace as that could
 # throw off the counts.
@@ -22,5 +27,6 @@ mostPopular = connections.sort(func.col("connections").desc()).first()
 
 mostPopularName = names.filter(func.col("id") == mostPopular[0]).select("name").first()
 
-print(mostPopularName[0] + " is the most popular superhero with " + str(mostPopular[1]) + " co-appearances.")
+
+print("\n >>>>>>> " + mostPopularName[0] + " is the most popular superhero with " + str(mostPopular[1]) + " co-appearances.\n\n")
 
