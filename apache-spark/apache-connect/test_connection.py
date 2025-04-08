@@ -1,21 +1,21 @@
 from pyspark.sql import SparkSession
 
-# Conecta ao servidor Spark Connect
+# Connect to Spark Connect server
 spark = SparkSession.builder \
     .remote("sc://localhost:15002") \
-    .appName("TesteConexaoDentroContainer") \
+    .appName("SparkConnectTest") \
     .getOrCreate()
 
-# Cria um DataFrame simples
+# Create a simple DataFrame
 df = spark.createDataFrame([(1, 'Alice'), (2, 'Bob')], ['id', 'name'])
 
-# Mostra o DataFrame
+# Show the DataFrame
 df.show()
 
-# Executa uma operação SQL simples
+# Execute a simple SQL operation
 df.createOrReplaceTempView("people")
 result = spark.sql("SELECT * FROM people WHERE id = 1")
 result.show()
 
-# Finaliza a sessão
+# Stop the session
 spark.stop()

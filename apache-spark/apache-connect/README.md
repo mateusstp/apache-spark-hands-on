@@ -7,7 +7,7 @@ This directory contains a Docker environment for running movie similarity analys
 - `Dockerfile`: Apache Spark environment configuration
 - `docker-compose.yml`: Spark services configuration (master, workers, connect)
 - `movie-similarities-local.py`: Script to analyze movie similarities via Spark Connect
-- `teste_conexao.py`: Simple script to test the connection with Spark Connect
+- `test_connection.py`: Simple script to test the connection with Spark Connect
 - `requirements.txt`: Dependencies for the Docker environment
 - `requirements-local.txt`: Dependencies for the local environment
 
@@ -58,7 +58,7 @@ This will analyze movie similarities and return recommendations for the movie wi
 To verify if the connection with Spark Connect is working:
 
 ```bash
-python teste_conexao.py
+python test_connection.py
 ```
 
 ## Monitoring the Spark Application
