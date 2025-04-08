@@ -116,7 +116,7 @@ The cleanup script will remove:
 - Stopped containers
 - Apache Spark images
 - Unused networks
-- Build cache
+- Build cache (including dangling images and build layers)
 - Unused volumes
 
 The deep cleanup mode (--all) will remove ALL Docker resources, including running containers from other projects.

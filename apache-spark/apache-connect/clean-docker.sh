@@ -46,7 +46,9 @@ if [ "$DEEP_CLEAN" = true ]; then
   docker volume rm $(docker volume ls -q) 2>/dev/null || true
   
   echo "\n=== Removing ALL build cache ==="
-  docker builder prune -af
+  docker builder prune -af --filter until=336h
+  # Remove dangling images (untagged images)
+  docker image prune -f
 else
   # Standard cleanup - only remove unused resources
   echo "\n=== Removing all stopped containers ==="
@@ -60,6 +62,12 @@ else
   
   echo "\n=== Removing build cache ==="
   docker builder prune -f
+  
+  echo "\n=== Removing dangling images and build layers ==="
+  # Remove dangling images (untagged images)
+  docker image prune -f
+  # Remove unused build cache
+  docker buildx prune -f
   
   echo "\n=== Removing unused volumes ==="
   docker volume prune -f

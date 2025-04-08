@@ -7,8 +7,9 @@ echo "Building Docker images for Spark Connect environment..."
 # Navigate to the script directory
 cd "$(dirname "$0")"
 
-# Build the Docker images with no cache to ensure fresh builds
-docker-compose build --no-cache
+# Build the Docker image directly with docker build
+echo "Building apache-spark-connect image..."
+docker build -t apache-spark-connect:latest .
 
 echo ""
 echo "Docker images built successfully!"

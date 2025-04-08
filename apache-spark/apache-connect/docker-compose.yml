@@ -1,11 +1,12 @@
-version: '3.8'
-
 networks:
   spark-network:
     driver: bridge
 
 services:
   spark-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: apache-spark-connect:latest
     container_name: spark-master
     networks:
@@ -33,6 +34,9 @@ services:
       - ../data:/data
 
   spark-worker-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: apache-spark-connect:latest
     container_name: spark-worker-1
     networks:
@@ -60,6 +64,9 @@ services:
   # Worker 2 foi removido para economizar recursos
 
   spark-connect:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: apache-spark-connect:latest
     container_name: spark-connect
     networks:
