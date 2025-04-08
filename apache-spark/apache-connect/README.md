@@ -1,84 +1,91 @@
-# Apache Spark Movie Similarities - Docker Setup
+# Apache Spark Movie Similarities com Spark Connect
 
-This directory contains a Docker environment for running movie similarity analysis using Apache Spark, along with a Python script for demonstration.
+Este diretu00f3rio contu00e9m um ambiente Docker para executar anu00e1lise de similaridade de filmes usando Apache Spark Connect, que permite executar cu00f3digo Python localmente enquanto processa dados em um cluster Spark.
 
-## Project Structure
+## Estrutura do Projeto
 
-- `Dockerfile`: Apache Spark environment configuration
-- `movie-similarities-dataframe-connect.py`: Script for analyzing movie similarities
+- `Dockerfile`: Configurau00e7u00e3o do ambiente Apache Spark
+- `docker-compose.yml`: Configurau00e7u00e3o dos serviu00e7os Spark (master, workers, connect)
+- `movie-similarities-local.py`: Script para analisar similaridades de filmes via Spark Connect
+- `teste_conexao.py`: Script simples para testar a conexu00e3o com o Spark Connect
+- `requirements.txt`: Dependu00eancias para o ambiente Docker
+- `requirements-local.txt`: Dependu00eancias para o ambiente local
 
-## Prerequisites
+## Pru00e9-requisitos
 
-- Docker installed on your system
-- Git to clone the repository (if you haven't already)
+- Docker e Docker Compose instalados no seu sistema
+- Python 3.x instalado localmente
 
-## Building the Docker Image
+## Configurando o Ambiente
 
-To build the Docker image with the Apache Spark environment:
+### 1. Construir e Iniciar os Serviu00e7os Docker
 
 ```bash
-# Navigate to the apache-connect directory
+# Navegar para o diretu00f3rio apache-connect
 cd apache-spark/apache-connect
 
-# Build the Docker image
-docker build -t apache-spark-movies:latest .
+# Construir a imagem Docker e iniciar os serviu00e7os
+docker-compose up -d --build
 ```
 
-## Running the Container
-
-There are two ways to run the container:
-
-### Method 1: Interactive Execution
+### 2. Configurar o Ambiente Python Local
 
 ```bash
-# Run the container interactively with data volume mount
-docker run -it --name spark-movies -p 4040:4040 -p 8080:8080 -v "$(pwd)/../data:/data" apache-spark-movies:latest
+# Criar e ativar ambiente virtual Python
+python -m venv spark-venv
+source spark-venv/bin/activate  # No Windows: spark-venv\Scripts\activate
+
+# Instalar dependu00eancias
+pip install -r requirements-local.txt
 ```
 
-### Method 2: Background Execution
+## Executando a Anu00e1lise de Similaridade de Filmes
+
+O script `movie-similarities-local.py` u00e9 executado **localmente** mas se conecta ao servidor Spark Connect para processar os dados.
 
 ```bash
-# Run the container in the background with data volume mount
-docker run -d --name spark-movies -p 4040:4040 -p 8080:8080 -v "$(pwd)/../data:/data" apache-spark-movies:latest /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+# Ativar o ambiente virtual (se ainda nu00e3o estiver ativado)
+source spark-venv/bin/activate
+
+# Executar o script com um ID de filme como argumento
+python movie-similarities-local.py 50
 ```
 
-## Running the Analysis Script
+Isso analisaru00e1 as similaridades de filmes e retornaru00e1 recomendau00e7u00f5es para o filme com ID 50 (Star Wars). Vocu00ea pode substituir 50 por qualquer outro ID de filme que desejar.
 
-The script `movie-similarities-dataframe-connect.py` needs to be executed **inside the container** because it depends on the file paths that exist in the container's filesystem.
+### Testando a Conexu00e3o
+
+Para verificar se a conexu00e3o com o Spark Connect estu00e1 funcionando:
 
 ```bash
-# Copy the script to the container
-docker cp movie-similarities-dataframe-connect.py spark-movies:/opt/spark/
-
-# Execute the script inside the container
-docker exec -it spark-movies /bin/bash -c "cd /opt/spark && spark-submit movie-similarities-dataframe-connect.py 50"
+python teste_conexao.py
 ```
 
-This will analyze movie similarities and return recommendations for movie ID 50. You can replace 50 with any other movie ID you're interested in.
+## Monitorando a Aplicau00e7u00e3o Spark
 
-### Accessing the Spark Web UI
+Com os serviu00e7os em execuu00e7u00e3o, vocu00ea pode acessar:
 
-During script execution, you can access the Spark UI at http://localhost:4040 (or 4041 if 4040 is already in use).
+- Interface Web do Spark Master: http://localhost:8080
+- Interface Web do Spark Connect: http://localhost:4040 (durante a execuu00e7u00e3o da aplicau00e7u00e3o)
 
-## Monitoring the Spark Application
-
-Once the application is running, you can access:
-
-- Spark UI: http://localhost:4040 (during application execution)
-- Spark Master UI: http://localhost:8080 (cluster overview)
-
-## Stopping the Container
+## Parando os Serviu00e7os
 
 ```bash
-# Stop the container
-docker stop spark-movies
-
-# Remove the container
-docker rm spark-movies
+# Parar todos os serviu00e7os
+docker-compose down
 ```
 
-## Additional Notes
+## Soluu00e7u00e3o de Problemas
 
-- You need to mount your data directory as a volume when running the container using the `-v` flag as shown in the examples above.
-- The path `/data` inside the container is created and ready to use with your mounted data.
-- For large datasets, consider increasing the memory allocated to Spark executors by modifying the `spark.executor.memory` parameter.
+Se encontrar problemas de conexu00e3o:
+
+1. Verifique se todos os serviu00e7os estu00e3o em execuu00e7u00e3o: `docker-compose ps`
+2. Verifique os logs do serviu00e7o Spark Connect: `docker-compose logs spark-connect`
+3. Certifique-se de que a porta 15002 estu00e1 acessu00edvel localmente
+4. Verifique se as dependu00eancias Python estu00e3o instaladas corretamente no ambiente virtual
+
+## Notas Adicionais
+
+- O diretu00f3rio de dados u00e9 montado automaticamente no container via docker-compose
+- O caminho `/data` dentro do container estu00e1 configurado para acessar os dados
+- Para conjuntos de dados grandes, considere aumentar a memu00f3ria alocada para os executores Spark modificando os paru00e2metros no docker-compose.yml
