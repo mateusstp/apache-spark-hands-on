@@ -1,91 +1,91 @@
-# Apache Spark Movie Similarities com Spark Connect
+# Apache Spark Movie Similarities with Spark Connect
 
-Este diretu00f3rio contu00e9m um ambiente Docker para executar anu00e1lise de similaridade de filmes usando Apache Spark Connect, que permite executar cu00f3digo Python localmente enquanto processa dados em um cluster Spark.
+This directory contains a Docker environment for running movie similarity analysis using Apache Spark Connect, which allows you to run Python code locally while processing data in a Spark cluster.
 
-## Estrutura do Projeto
+## Project Structure
 
-- `Dockerfile`: Configurau00e7u00e3o do ambiente Apache Spark
-- `docker-compose.yml`: Configurau00e7u00e3o dos serviu00e7os Spark (master, workers, connect)
-- `movie-similarities-local.py`: Script para analisar similaridades de filmes via Spark Connect
-- `teste_conexao.py`: Script simples para testar a conexu00e3o com o Spark Connect
-- `requirements.txt`: Dependu00eancias para o ambiente Docker
-- `requirements-local.txt`: Dependu00eancias para o ambiente local
+- `Dockerfile`: Apache Spark environment configuration
+- `docker-compose.yml`: Spark services configuration (master, workers, connect)
+- `movie-similarities-local.py`: Script to analyze movie similarities via Spark Connect
+- `teste_conexao.py`: Simple script to test the connection with Spark Connect
+- `requirements.txt`: Dependencies for the Docker environment
+- `requirements-local.txt`: Dependencies for the local environment
 
-## Pru00e9-requisitos
+## Prerequisites
 
-- Docker e Docker Compose instalados no seu sistema
-- Python 3.x instalado localmente
+- Docker and Docker Compose installed on your system
+- Python 3.x installed locally
 
-## Configurando o Ambiente
+## Setting Up the Environment
 
-### 1. Construir e Iniciar os Serviu00e7os Docker
+### 1. Build and Start Docker Services
 
 ```bash
-# Navegar para o diretu00f3rio apache-connect
+# Navigate to the apache-connect directory
 cd apache-spark/apache-connect
 
-# Construir a imagem Docker e iniciar os serviu00e7os
+# Build the Docker image and start services
 docker-compose up -d --build
 ```
 
-### 2. Configurar o Ambiente Python Local
+### 2. Configure the Local Python Environment
 
 ```bash
-# Criar e ativar ambiente virtual Python
+# Create and activate Python virtual environment
 python -m venv spark-venv
-source spark-venv/bin/activate  # No Windows: spark-venv\Scripts\activate
+source spark-venv/bin/activate  # On Windows: spark-venv\Scripts\activate
 
-# Instalar dependu00eancias
+# Install dependencies
 pip install -r requirements-local.txt
 ```
 
-## Executando a Anu00e1lise de Similaridade de Filmes
+## Running the Movie Similarity Analysis
 
-O script `movie-similarities-local.py` u00e9 executado **localmente** mas se conecta ao servidor Spark Connect para processar os dados.
+The `movie-similarities-local.py` script runs **locally** but connects to the Spark Connect server to process the data.
 
 ```bash
-# Ativar o ambiente virtual (se ainda nu00e3o estiver ativado)
+# Activate the virtual environment (if not already activated)
 source spark-venv/bin/activate
 
-# Executar o script com um ID de filme como argumento
+# Run the script with a movie ID as an argument
 python movie-similarities-local.py 50
 ```
 
-Isso analisaru00e1 as similaridades de filmes e retornaru00e1 recomendau00e7u00f5es para o filme com ID 50 (Star Wars). Vocu00ea pode substituir 50 por qualquer outro ID de filme que desejar.
+This will analyze movie similarities and return recommendations for the movie with ID 50 (Star Wars). You can replace 50 with any other movie ID you want.
 
-### Testando a Conexu00e3o
+### Testing the Connection
 
-Para verificar se a conexu00e3o com o Spark Connect estu00e1 funcionando:
+To verify if the connection with Spark Connect is working:
 
 ```bash
 python teste_conexao.py
 ```
 
-## Monitorando a Aplicau00e7u00e3o Spark
+## Monitoring the Spark Application
 
-Com os serviu00e7os em execuu00e7u00e3o, vocu00ea pode acessar:
+With the services running, you can access:
 
-- Interface Web do Spark Master: http://localhost:8080
-- Interface Web do Spark Connect: http://localhost:4040 (durante a execuu00e7u00e3o da aplicau00e7u00e3o)
+- Spark Master Web UI: http://localhost:8080
+- Spark Connect Web UI: http://localhost:4040 (during application execution)
 
-## Parando os Serviu00e7os
+## Stopping the Services
 
 ```bash
-# Parar todos os serviu00e7os
+# Stop all services
 docker-compose down
 ```
 
-## Soluu00e7u00e3o de Problemas
+## Troubleshooting
 
-Se encontrar problemas de conexu00e3o:
+If you encounter connection issues:
 
-1. Verifique se todos os serviu00e7os estu00e3o em execuu00e7u00e3o: `docker-compose ps`
-2. Verifique os logs do serviu00e7o Spark Connect: `docker-compose logs spark-connect`
-3. Certifique-se de que a porta 15002 estu00e1 acessu00edvel localmente
-4. Verifique se as dependu00eancias Python estu00e3o instaladas corretamente no ambiente virtual
+1. Check if all services are running: `docker-compose ps`
+2. Check the Spark Connect service logs: `docker-compose logs spark-connect`
+3. Make sure port 15002 is accessible locally
+4. Verify that Python dependencies are correctly installed in the virtual environment
 
-## Notas Adicionais
+## Additional Notes
 
-- O diretu00f3rio de dados u00e9 montado automaticamente no container via docker-compose
-- O caminho `/data` dentro do container estu00e1 configurado para acessar os dados
-- Para conjuntos de dados grandes, considere aumentar a memu00f3ria alocada para os executores Spark modificando os paru00e2metros no docker-compose.yml
+- The data directory is automatically mounted in the container via docker-compose
+- The path `/data` inside the container is configured to access the data
+- For large datasets, consider increasing the memory allocated to Spark executors by modifying the parameters in docker-compose.yml
