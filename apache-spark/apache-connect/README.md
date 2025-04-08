@@ -10,6 +10,9 @@ This directory contains a Docker environment for running movie similarity analys
 - `test_connection.py`: Simple script to test the connection with Spark Connect
 - `requirements.txt`: Dependencies for the Docker environment
 - `requirements-local.txt`: Dependencies for the local environment
+- `start-environment.sh`: Script to start the Docker environment
+- `build-images.sh`: Script to build Docker images
+- `stop-environment.sh`: Script to stop the Docker environment
 
 ## Prerequisites
 
@@ -20,10 +23,22 @@ This directory contains a Docker environment for running movie similarity analys
 
 ### 1. Build and Start Docker Services
 
+You can use the provided automation scripts:
+
 ```bash
 # Navigate to the apache-connect directory
 cd apache-spark/apache-connect
 
+# Build the Docker images (only needed once or when Dockerfile changes)
+./build-images.sh
+
+# Start the environment
+./start-environment.sh
+```
+
+Or manually with Docker Compose:
+
+```bash
 # Build the Docker image and start services
 docker-compose up -d --build
 ```
@@ -69,6 +84,15 @@ With the services running, you can access:
 - Spark Connect Web UI: http://localhost:4040 (during application execution)
 
 ## Stopping the Services
+
+Using the automation script:
+
+```bash
+# Stop all services
+./stop-environment.sh
+```
+
+Or manually with Docker Compose:
 
 ```bash
 # Stop all services
