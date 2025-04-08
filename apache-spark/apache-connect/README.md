@@ -13,6 +13,7 @@ This directory contains a Docker environment for running movie similarity analys
 - `start-environment.sh`: Script to start the Docker environment
 - `build-images.sh`: Script to build Docker images
 - `stop-environment.sh`: Script to stop the Docker environment
+- `clean-docker.sh`: Script to clean Docker resources (containers, images, networks, volumes)
 
 ## Prerequisites
 
@@ -98,6 +99,27 @@ Or manually with Docker Compose:
 # Stop all services
 docker-compose down
 ```
+
+## Cleaning Docker Resources
+
+To clean up Docker resources after using the environment, you can use the provided script:
+
+```bash
+# Standard cleanup (preserves running containers)
+./clean-docker.sh
+
+# Deep cleanup (removes ALL Docker resources, including running containers)
+./clean-docker.sh --all
+```
+
+The cleanup script will remove:
+- Stopped containers
+- Apache Spark images
+- Unused networks
+- Build cache
+- Unused volumes
+
+The deep cleanup mode (--all) will remove ALL Docker resources, including running containers from other projects.
 
 ## Troubleshooting
 
